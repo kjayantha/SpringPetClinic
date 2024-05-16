@@ -15,27 +15,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 class CycloneDxInfoContributor implements InfoContributor, InitializingBean {
-    private final Resource bomFile;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private @Nullable JsonNode bom;
+	private final Resource bomFile;
+	private final ObjectMapper objectMapper = new ObjectMapper();
+	private @Nullable JsonNode bom;
 
-    CycloneDxInfoContributor(@Value("classpath:bom.json") Resource bomFile) {
-        this.bomFile = bomFile;
-    }
+	CycloneDxInfoContributor(@Value("classpath:bom.json") Resource bomFile) {
+		this.bomFile = bomFile;
+	}
 
-    @Override
-    public void contribute(Info.Builder builder) {
-        if (bom != null) {
-            builder.withDetail("bom", bom);
-        }
-    }
+	@Override
+	public void contribute(Info.Builder builder) {
+		if (bom != null) {
+			builder.withDetail("bom", bom);
+		}
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        if (bomFile.exists()) {
-            try (InputStream is = bomFile.getInputStream()) {
-                this.bom = objectMapper.readTree(is);
-            }
-        }
-    }
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		if (bomFile.exists()) {
+			try (InputStream is = bomFile.getInputStream()) {
+				this.bom = objectMapper.readTree(is);
+			}
+		}
+	}
 }
